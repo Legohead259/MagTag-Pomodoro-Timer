@@ -71,7 +71,7 @@ private:
 
 class SevenSegmentWidget {
 public:
-    SevenSegmentWidget(uint16_t posX, uint16_t posY, uint16_t digit, uint16_t color=EPD_BLACK, float anchorX=0.0, float anchorY=0.0);
+    SevenSegmentWidget(uint16_t posX, uint16_t posY, uint16_t digit, uint8_t placesOverride=0, uint16_t color=EPD_BLACK, float anchorX=0.0, float anchorY=0.0);
     ~SevenSegmentWidget();
 
     #ifdef ARDUINO_MAGTAG29_ESP32S2
@@ -84,6 +84,7 @@ private:
     uint16_t _posX;
     uint16_t _posY;
     uint16_t _digit;
+    uint8_t _placesOverride;
     uint16_t _color;
     float _anchorX;
     float _anchorY;
@@ -91,7 +92,7 @@ private:
     SevenSegmentDigit _digits[MAX_DIGITS];
 
     void formDigitArray();
-    void _construct(uint16_t posX, uint16_t posY, uint16_t digit, uint16_t color=EPD_BLACK, float anchorX=0.0, float anchorY=0.0);
+    void _construct(uint16_t posX, uint16_t posY, uint16_t digit, uint8_t placesOverride=0, uint16_t color=EPD_BLACK, float anchorX=0.0, float anchorY=0.0);
 };
 
 #endif // SEVEN_SEGMENT_WIDGET_H

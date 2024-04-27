@@ -82,15 +82,16 @@ void SevenSegmentDigit::render(ThinkInk_290_Grayscale4_T5* display) {
 #endif // #ARDUINO_MAGTAG29_ESP32S2
 
 
-SevenSegmentWidget::SevenSegmentWidget(uint16_t posX, uint16_t posY, uint16_t digit, uint16_t color, float anchorX, float anchorY) {
-    _construct(posX, posY, digit, color, anchorX, anchorY);
+SevenSegmentWidget::SevenSegmentWidget(uint16_t posX, uint16_t posY, uint16_t digit, uint8_t placesOverride, uint16_t color, float anchorX, float anchorY) {
+    _construct(posX, posY, digit, placesOverride, color, anchorX, anchorY);
 }
 
 SevenSegmentWidget::~SevenSegmentWidget() {}
 
-void SevenSegmentWidget::_construct(uint16_t posX, uint16_t posY, uint16_t digit, uint16_t color, float anchorX, float anchorY) {
+void SevenSegmentWidget::_construct(uint16_t posX, uint16_t posY, uint16_t digit, uint8_t placesOverride, uint16_t color, float anchorX, float anchorY) {
     _posX = posX;
     _posY = posY;
+    _placesOverride = placesOverride;
     _color = color;
     _anchorX = anchorX;
     _anchorY = anchorY;
@@ -107,6 +108,14 @@ void SevenSegmentWidget::formDigitArray() {
     while (_digitTemp > 0) {
         _digitTemp /= 10;
         ++_order;
+    }
+
+    if (_digit == 0) { // Apply fix for if digit is 0
+        _order++;
+    }
+
+    if (_order < _placesOverride) { // Check for adding additional places
+        _order = +_placesOverride;
     }
 
     _digitTemp = _digit;
