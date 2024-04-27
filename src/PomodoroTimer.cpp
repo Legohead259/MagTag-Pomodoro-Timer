@@ -4,7 +4,7 @@ PomodoroTimer timer = PomodoroTimer();
 
 PomodoroTimer::PomodoroTimer() 
 : counterDisplay(CENTER_DISPLAY_X_PX-36, CENTER_DISPLAY_Y_PX-29, 00, 2) {
-
+    displayMutex = new std::mutex();
 }
 
 PomodoroTimer::~PomodoroTimer() {
@@ -14,7 +14,101 @@ PomodoroTimer::~PomodoroTimer() {
 void PomodoroTimer::init() {
     this->MagTag::begin();
 
+    // peripherals.setCallbackBtnA(startTimer);
+    // peripherals.setCallbackBtnB(acknowledgeAlarm);
+    // peripherals.setCallbackBtnC(pauseTimer);
+    // peripherals.setCallbackBtnD(cancelTimer);
+    
+    update();
 }
+
+void PomodoroTimer::update() {
+    switch (state) {
+        case INITIALIZATION:
+            _timeRemaining = WORK_TIME_MINS;
+            state = WORK_PAUSE;
+            break;
+        case WORK_PAUSE:
+        case SHORT_BREAK_PAUSE:
+        case LONG_BREAK_PAUSE:
+            return; // Do not force a refresh if the timer is paused
+        case WORK_RUNNING:
+        case SHORT_BREAK_RUNNING:
+        case LONG_BREAK_RUNNING:
+            if (--_timeRemaining <= 0) { 
+                if (state == WORK_RUNNING) { _numWorkPeriods++; }
+                prevState = state; 
+                state = ALARM; 
+            } 
+            break;
+        default:
+            break;
+    }
+
+    updateDisplay();
+
+    while (state == ALARM) {
+        // TODO: Flash LEDs
+        // TODO: Beep buzzer
+        digitalWrite(LED_BUILTIN, HIGH);
+        delay(1000);
+        digitalWrite(LED_BUILTIN, LOW);
+        delay(1000);                
+        continue;
+    }
+}
+
+void PomodoroTimer::start() { 
+    switch (state) {
+    case WORK_PAUSE:
+        prevState = state;
+        state = WORK_RUNNING;
+        break;
+    case SHORT_BREAK_PAUSE:
+        prevState = state;
+        state = SHORT_BREAK_RUNNING;
+        break;
+    case LONG_BREAK_PAUSE:
+        prevState = state;
+        state = LONG_BREAK_RUNNING;
+        break;
+    default:
+        return;
+    }
+    update();
+}
+
+void PomodoroTimer::ack() {
+    if (state == ALARM) {
+        // TODO: Stop flashing LEDs
+        // TODO: Stop beeping buzzer
+        switch (prevState) {
+        case WORK_RUNNING:
+            if (_numWorkPeriods < 4) {
+                state = SHORT_BREAK_PAUSE;
+                _timeRemaining = SHORT_BREAK_TIME_MINS;
+            }
+            else {
+                state = LONG_BREAK_PAUSE;
+                _numWorkPeriods = 0;
+                _timeRemaining = LONG_BREAK_TIME_MINS;
+            }
+            break;
+        case SHORT_BREAK_RUNNING:
+        case LONG_BREAK_RUNNING:
+            state = WORK_PAUSE;
+            _timeRemaining = WORK_TIME_MINS;
+            break;
+        default:
+            break;
+        }
+        prevState = ALARM;
+        updateDisplay();
+        display.display();
+    }
+}
+void PomodoroTimer::pause() {}
+void PomodoroTimer::cancel() {}
 
 void PomodoroTimer::renderWorkPeriods() {
     uint16_t posX = 240;
@@ -37,10 +131,12 @@ void PomodoroTimer::renderStateText(const char* stateStr) {
 }
 
 void PomodoroTimer::updateDisplay() {
-    display.clearDisplay();
+    displayMutex->lock(); // Block execution until display is released, then grab it
+    display.clearBuffer();
+    // display.clearDisplay();
+    counterDisplay.setDigit(_timeRemaining);
     renderCounter();
     renderWorkPeriods();
     display.display();
+    displayMutex->unlock(); // Release display
 }
-
-// void PomodoroTimer::

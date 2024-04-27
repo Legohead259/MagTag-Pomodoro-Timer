@@ -78,7 +78,7 @@ public:
     void render(ThinkInk_290_Grayscale4_T5* display);
     #endif // ARDUINO_MAGTAG29_ESP32S2
 
-    void setDigit(uint16_t digit) { _digit = digit; formDigitArray(); }
+    void setDigit(uint16_t digit) { memset(_digits, 0, sizeof(_digits)); _digit = digit; formDigitArray(); }
 
 private:
     uint16_t _posX;
