@@ -36,11 +36,12 @@ void setup() {
     timer.init();
 
 
-    timer.display.clearDisplay();   // Clear the buffer.
+    // timer.display.clearDisplay();   // Clear the buffer.
     // SevenSegmentWidget testWidget = SevenSegmentWidget(100, 32, 12345);
     // testWidget.render(&timer.display);
-    timer.renderCounter();
-    timer.display.display();
+    // timer.renderCounter();
+    // timer.display.display();
+    timer.updateDisplay();
     // timer.updateDisplay();
     delay(2000);
 }
