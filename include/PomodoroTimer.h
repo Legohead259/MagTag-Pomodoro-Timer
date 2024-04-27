@@ -13,29 +13,14 @@ public:
     void init();
 
     void renderCounter() { counterDisplay.render(&display); }
-    void updateDisplay() { display.clearDisplay(); renderCounter(); display.display(); }
-    void incrementCounter() { counter++; counterDisplay.setDigit(counter); }
-    void decrementCounter() { counter--; counterDisplay.setDigit(counter); }
+    void updateDisplay();
 private:
     bool _isLedOn = false;
-    int counter = 0;
+    uint8_t _timeRemaining = 0;
 
-    SevenSegmentWidget counterDisplay = SevenSegmentWidget(100, 32, counter);
+    SevenSegmentWidget counterDisplay;
 };
 
 extern PomodoroTimer timer;
-
-static void startAlarm() {
-    timer.peripherals.enableSpeaker();
-}
-
-static void stopAlarm() {
-    timer.peripherals.disableSpeaker();
-}
-
-static void incrementCounter() {
-    timer.incrementCounter();
-    timer.updateDisplay();
-}
 
 #endif // POMODORO_TIMER_H

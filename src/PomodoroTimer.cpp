@@ -2,7 +2,8 @@
 
 PomodoroTimer timer = PomodoroTimer();
 
-PomodoroTimer::PomodoroTimer() {
+PomodoroTimer::PomodoroTimer() 
+: counterDisplay(CENTER_DISPLAY_X_PX-36, CENTER_DISPLAY_Y_PX-29, 00, 2) {
 
 }
 
@@ -13,6 +14,10 @@ PomodoroTimer::~PomodoroTimer() {
 void PomodoroTimer::init() {
     this->MagTag::begin();
 
-    peripherals.setCallbackBtnB(startAlarm);
-    peripherals.setCallbackBtnC(stopAlarm);
 }
+
+void PomodoroTimer::updateDisplay() {
+    
+}
+
+// void PomodoroTimer::
