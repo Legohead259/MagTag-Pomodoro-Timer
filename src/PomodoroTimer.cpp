@@ -106,7 +106,24 @@ void PomodoroTimer::ack() {
         updateDisplay();
     }
 }
-void PomodoroTimer::pause() {}
+void PomodoroTimer::pause() {
+    switch (state) {
+        case WORK_RUNNING:
+            prevState = state;
+            state = WORK_PAUSE;
+            break;
+        case SHORT_BREAK_RUNNING:
+            prevState = state;
+            state = SHORT_BREAK_PAUSE;
+            break;
+        case LONG_BREAK_RUNNING:
+            prevState = state;
+            state = LONG_BREAK_PAUSE;
+        default:
+            break;
+    }
+    updateDisplay();
+}
 void PomodoroTimer::cancel() {}
 
 void PomodoroTimer::renderWorkPeriods() {
