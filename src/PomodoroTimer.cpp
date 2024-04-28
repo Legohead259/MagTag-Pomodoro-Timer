@@ -49,11 +49,13 @@ void PomodoroTimer::update() {
 
     while (state == ALARM) {
         // TODO: Flash LEDs
-        // TODO: Beep buzzer
-        digitalWrite(LED_BUILTIN, HIGH);
-        delay(1000);
-        digitalWrite(LED_BUILTIN, LOW);
-        delay(1000);                
+        peripherals.enableSpeaker();
+        peripherals.playTone(1000, 1000);
+        delay(500);
+        // digitalWrite(LED_BUILTIN, HIGH);
+        // delay(1000);
+        // digitalWrite(LED_BUILTIN, LOW);
+        // delay(1000);                
         continue;
     }
 }
@@ -81,7 +83,7 @@ void PomodoroTimer::start() {
 void PomodoroTimer::ack() {
     if (state == ALARM) {
         // TODO: Stop flashing LEDs
-        // TODO: Stop beeping buzzer
+        peripherals.disableSpeaker();
         switch (prevState) {
         case WORK_RUNNING:
             if (_numWorkPeriods < 4) {
