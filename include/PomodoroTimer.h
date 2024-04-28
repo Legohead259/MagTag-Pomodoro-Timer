@@ -7,7 +7,7 @@
 #include <mutex>
 
 #define MINS_TO_MS              60e3
-#define WORK_TIME_MINS          2
+#define WORK_TIME_MINS          5
 #define SHORT_BREAK_TIME_MINS   2
 #define LONG_BREAK_TIME_MINS    2
 #define WORK_TIME_MS            WORK_TIME_MINS*MINS_TO_MS

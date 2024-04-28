@@ -75,7 +75,7 @@ void PomodoroTimer::start() {
     default:
         return;
     }
-    update();
+    updateDisplay();
 }
 
 void PomodoroTimer::ack() {
@@ -124,7 +124,28 @@ void PomodoroTimer::pause() {
     }
     updateDisplay();
 }
-void PomodoroTimer::cancel() {}
+void PomodoroTimer::cancel() {
+    switch (state) {
+        case WORK_RUNNING:
+            prevState = state;
+            state = WORK_PAUSE;
+            _timeRemaining = WORK_TIME_MINS;
+            break;
+        case SHORT_BREAK_RUNNING:
+            prevState = state;
+            state = SHORT_BREAK_PAUSE;
+            _timeRemaining = SHORT_BREAK_TIME_MINS;
+            break;
+        case LONG_BREAK_RUNNING:
+            prevState = state;
+            state = LONG_BREAK_PAUSE;
+            _timeRemaining = LONG_BREAK_TIME_MINS;
+        default:
+            break;
+    }
+    // display.clearDisplay();
+    updateDisplay();
+}
 
 void PomodoroTimer::renderWorkPeriods() {
     uint16_t posX = 240;
