@@ -153,6 +153,28 @@ void PomodoroTimer::renderStateText() {
     }
 }
 
+void PomodoroTimer::renderLabelText() {
+    const uint16_t LABEL_POS_Y = 120;
+
+    display.addText(5, LABEL_POS_Y, &FreeSans9pt7b, 1, EPD_BLACK);
+    display.print("START");
+
+    display.addText(80, LABEL_POS_Y, &FreeSans9pt7b, 1, EPD_BLACK);
+    display.print("ACK");
+
+    if (state == WORK_PAUSE || state == SHORT_BREAK_PAUSE || state == LONG_BREAK_PAUSE) {
+        display.fillRect(140, 105, 60, 20, EPD_BLACK);
+        display.addText(140, LABEL_POS_Y, &FreeSans9pt7b, 1, EPD_WHITE);
+    }
+    else {
+        display.addText(140, LABEL_POS_Y, &FreeSans9pt7b, 1, EPD_BLACK);
+    }
+    display.print("PAUSE");
+
+    display.addText(210, LABEL_POS_Y, &FreeSans9pt7b, 1, EPD_BLACK);
+    display.print("CANCEL");
+}
+
 void PomodoroTimer::updateDisplay() {
     displayMutex->lock(); // Block execution until display is released, then grab it
     display.clearBuffer();
@@ -161,6 +183,7 @@ void PomodoroTimer::updateDisplay() {
     renderCounter();
     renderWorkPeriods();
     renderStateText();
+    renderLabelText();
     display.display();
     displayMutex->unlock(); // Release display
 }
