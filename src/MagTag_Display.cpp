@@ -14,8 +14,3 @@ void MagTag_Display::addText(int16_t x, int16_t y, const GFXfont* font, uint8_t 
     setTextSize(size);
     setTextColor(color);
 }
-
-// void MagTag_Display::setText(const char* text, bool newline) {
-//     _display.print(text);
-//     if (newline) _display.println();
-// }

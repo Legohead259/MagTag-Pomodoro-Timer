@@ -4,8 +4,6 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 
-// #define PIN_NEOPIXEL 4
-
 typedef std::function<void()> ButtonCallback;
 
 static const uint32_t LED_OFF  = Adafruit_NeoPixel::Color(0, 0, 0);

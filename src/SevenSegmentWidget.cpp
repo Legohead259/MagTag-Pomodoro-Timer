@@ -20,26 +20,6 @@ void SevenSegmentDigit::_construct(uint16_t posX, uint16_t posY, uint8_t digit, 
     _anchorY = anchorY;
 }
 
-// RENDER DIGITS:
-// use this funtion to print digits
-// valid range range: 0-999
-// void SevenSegmentDigit::render_digits(uint16_t pos_x, uint16_t pos_y, uint16_t digits, uint16_t color) {
-//     uint16_t spacing_x = DIGIT_SPACING_DEFAULT;
-
-//     uint8_t digit_array[] = {digits / 100 % 10, digits / 10 % 10, digits % 10};
-//     if (digits > 99) {
-//         render_digit(pos_x, pos_y, digit_array[0], color);
-//     }
-//     if (digits > 9) {
-//         render_digit(pos_x + spacing_x, pos_y, digit_array[1], color);
-//     }
-//     render_digit(pos_x + (spacing_x * 2), pos_y, digit_array[2], color);
-// }
-
-// RENDER DIGIT
-// don't use this unless you only need a single digit
-// use render_digits() func above instead
-
 #ifdef ARDUINO_MAGTAG29_ESP32S2
 void SevenSegmentDigit::render(ThinkInk_290_Grayscale4_T5* display) {       
     uint16_t w = _segmentOptions.width;

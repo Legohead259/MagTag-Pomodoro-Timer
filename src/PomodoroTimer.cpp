@@ -13,11 +13,6 @@ PomodoroTimer::~PomodoroTimer() {
 
 void PomodoroTimer::init() {
     this->MagTag::begin();
-
-    // peripherals.setCallbackBtnA(startTimer);
-    // peripherals.setCallbackBtnB(acknowledgeAlarm);
-    // peripherals.setCallbackBtnC(pauseTimer);
-    // peripherals.setCallbackBtnD(cancelTimer);
     
     peripherals.enableNeoPixel();
     delay(5);
@@ -61,11 +56,7 @@ void PomodoroTimer::update() {
         peripherals.setNeoPixelFill(LED_OFF);
         delay(1000);
         peripherals.setNeoPixelFill(RED);
-        delay(1000);
-        // digitalWrite(LED_BUILTIN, HIGH);
-        // delay(1000);
-        // digitalWrite(LED_BUILTIN, LOW);
-        // delay(1000);                
+        delay(1000);        
         continue;
     }
 }
@@ -93,7 +84,6 @@ void PomodoroTimer::start() {
 void PomodoroTimer::ack() {
     if (state == ALARM) {
         peripherals.disableNeoPixel();
-        // peripherals.setNeoPixelBrightness(0.0);
         peripherals.disableSpeaker();
         switch (prevState) {
         case WORK_RUNNING:
@@ -156,7 +146,6 @@ void PomodoroTimer::cancel() {
         default:
             break;
     }
-    // display.clearDisplay();
     updateDisplay();
 }
 
@@ -229,7 +218,6 @@ void PomodoroTimer::renderLabelText() {
 void PomodoroTimer::updateDisplay() {
     displayMutex->lock(); // Block execution until display is released, then grab it
     display.clearBuffer();
-    // display.clearDisplay();
     counterDisplay.setDigit(_timeRemaining);
     renderCounter();
     renderWorkPeriods();
