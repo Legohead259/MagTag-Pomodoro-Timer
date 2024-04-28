@@ -19,6 +19,12 @@ void PomodoroTimer::init() {
     // peripherals.setCallbackBtnC(pauseTimer);
     // peripherals.setCallbackBtnD(cancelTimer);
     
+    peripherals.enableNeoPixel();
+    delay(5);
+    peripherals.setNeoPixelFill(LED_OFF);
+    delay(5);
+    peripherals.disableNeoPixel();
+
     update();
 }
 
@@ -48,12 +54,18 @@ void PomodoroTimer::update() {
     updateDisplay();
 
     while (state == ALARM) {
-        // TODO: Flash LEDs
-        // TODO: Beep buzzer
-        digitalWrite(LED_BUILTIN, HIGH);
+        peripherals.enableSpeaker();
+        peripherals.playTone(1000, 1000);
+        peripherals.enableNeoPixel();
+        delay(5);
+        peripherals.setNeoPixelFill(LED_OFF);
         delay(1000);
-        digitalWrite(LED_BUILTIN, LOW);
-        delay(1000);                
+        peripherals.setNeoPixelFill(RED);
+        delay(1000);
+        // digitalWrite(LED_BUILTIN, HIGH);
+        // delay(1000);
+        // digitalWrite(LED_BUILTIN, LOW);
+        // delay(1000);                
         continue;
     }
 }
@@ -80,8 +92,9 @@ void PomodoroTimer::start() {
 
 void PomodoroTimer::ack() {
     if (state == ALARM) {
-        // TODO: Stop flashing LEDs
-        // TODO: Stop beeping buzzer
+        peripherals.disableNeoPixel();
+        // peripherals.setNeoPixelBrightness(0.0);
+        peripherals.disableSpeaker();
         switch (prevState) {
         case WORK_RUNNING:
             if (_numWorkPeriods < 4) {
