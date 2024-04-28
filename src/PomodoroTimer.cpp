@@ -104,7 +104,6 @@ void PomodoroTimer::ack() {
         }
         prevState = ALARM;
         updateDisplay();
-        display.display();
     }
 }
 void PomodoroTimer::pause() {}
@@ -126,8 +125,32 @@ void PomodoroTimer::renderWorkPeriods() {
     }
 }
 
-void PomodoroTimer::renderStateText(const char* stateStr) {
+void PomodoroTimer::renderStateText() {
+    const uint16_t FONT_SIZE = 1;
+    const uint16_t WORK__POS_X = 105;
+    const uint16_t SHORT_BREAK__POS_X = 68;
+    const uint16_t LONG_BREAK__POS_X = 73;
+    const uint16_t TEXT_POS_Y = 17;
 
+    switch (state) {
+        case WORK_PAUSE:
+        case WORK_RUNNING:
+            display.addText(WORK__POS_X, TEXT_POS_Y, &FreeSansBold9pt7b, FONT_SIZE, EPD_BLACK);
+            display.print("WORK");
+            break;
+        case SHORT_BREAK_PAUSE:
+        case SHORT_BREAK_RUNNING:
+            display.addText(SHORT_BREAK__POS_X, TEXT_POS_Y, &FreeSansBold9pt7b, FONT_SIZE, EPD_BLACK);
+            display.print("SHORT BREAK");
+            break;
+        case LONG_BREAK_PAUSE:
+        case LONG_BREAK_RUNNING:
+            display.addText(LONG_BREAK__POS_X, TEXT_POS_Y, &FreeSansBold9pt7b, FONT_SIZE, EPD_BLACK);
+            display.print("LONG BREAK");
+            break;
+        default:
+            break;
+    }
 }
 
 void PomodoroTimer::updateDisplay() {
@@ -137,6 +160,7 @@ void PomodoroTimer::updateDisplay() {
     counterDisplay.setDigit(_timeRemaining);
     renderCounter();
     renderWorkPeriods();
+    renderStateText();
     display.display();
     displayMutex->unlock(); // Release display
 }

@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Adafruit_ThinkInk.h>
+#include <Fonts/FreeSansBold9pt7b.h>
 
 #define DISPLAY_WIDTH_PX 296
 #define DISPLAY_HEIGHT_PX 128

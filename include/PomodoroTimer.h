@@ -41,7 +41,8 @@ public:
 
     void renderCounter() { counterDisplay.render(&display); }
     void renderWorkPeriods();
-    void renderStateText(const char* stateStr);
+    void renderStateText();
+    void renderLabelText();
     void updateDisplay();
 private:
     bool _isLedOn = false;
