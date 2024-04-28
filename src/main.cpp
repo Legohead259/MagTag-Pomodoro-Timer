@@ -25,9 +25,14 @@
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include "PomodoroTimer.h"
-#include "SevenSegmentWidget.h"
 
-bool isLedOn = false;
+TickType_t xLastWakeTime;
+const TickType_t xFrequency = 10000; //delay for mS
+
+static void startTimer() { timer.start(); }   
+static void acknowledgeAlarm() { timer.ack(); }
+static void pauseTimer() { timer.pause(); }
+static void cancelTimer() { timer.cancel(); }
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -36,21 +41,25 @@ void setup() {
     timer.init();
 
 
-    timer.display.clearDisplay();   // Clear the buffer.
+    // timer.display.clearDisplay();   // Clear the buffer.
     // SevenSegmentWidget testWidget = SevenSegmentWidget(100, 32, 12345);
     // testWidget.render(&timer.display);
-    timer.renderCounter();
-    timer.display.display();
+    // timer.renderCounter();
+    // timer.display.display();
     // timer.updateDisplay();
-    delay(2000);
+    // timer.updateDisplay();
+    // delay(2000);
+
+    attachInterrupt(BUTTON_A, startTimer, FALLING);
+    attachInterrupt(BUTTON_B, acknowledgeAlarm, FALLING);
+    attachInterrupt(BUTTON_C, pauseTimer, FALLING);
+    attachInterrupt(BUTTON_D, cancelTimer, FALLING);
 }
 
 // the loop function runs over and over again forever
 void loop() {
-    // digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
-    // delay(1000);                      // wait for a second
-    // digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
-    // delay(1000);                      // wait for a second
-    // magTag.peripherals.playTone(1000, 100);
-    // delay(1000);
+    timer.update();
+    // xLastWakeTime = xTaskGetTickCount();
+    // vTaskDelayUntil(&xLastWakeTime, xFrequency);
+    delay(xFrequency);
 }

@@ -66,7 +66,7 @@ void SevenSegmentDigit::render(ThinkInk_290_Grayscale4_T5* display) {
                 display->fillRoundRect(r+2*p+_posX, 2*w+3*p+_posY, w, h, r, _color); // SEG d
                 break;
             case 4:
-                display->fillRoundRect(0+_posX, w+r+p+_posY, h, w, r, _color); // SEG e
+                display->fillRoundRect(0+_posX, w+r+2*p+_posY, h, w, r, _color); // SEG e
                 break;
             case 5:
                 display->fillRoundRect(0+_posX, r+p+_posY, h, w, r, _color); // SEG f
@@ -102,15 +102,16 @@ void SevenSegmentWidget::_construct(uint16_t posX, uint16_t posY, uint16_t digit
 void SevenSegmentWidget::formDigitArray() {
     uint16_t _digitTemp = _digit;
     uint8_t _counter = MAX_DIGITS;
+    _order = 0;
 
     // Break into digits
     // Calculate the total number of digits in the number
-    while (_digitTemp > 0) {
-        _digitTemp /= 10;
-        ++_order;
+    if (_digitTemp == 0) { // Apply fix for if digit is 0
+        _order++;
     }
 
-    if (_digit == 0) { // Apply fix for if digit is 0
+    while (_digitTemp > 0) {
+        _digitTemp /= 10;
         _order++;
     }
 
